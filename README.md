@@ -4,6 +4,14 @@ sms-tools
 
 Sound analysis/synthesis tools for music applications written in python (with a bit of C) plus complementary teaching materials.
 
+
+
+What is the different from the parent repo
+---------
+
+I will not only update the `notebooks` and `workspace` folders, but also put my study notes in the `studynotes` folder.
+
+
 How to use
 ----------
 
