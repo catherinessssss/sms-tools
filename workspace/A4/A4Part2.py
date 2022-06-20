@@ -60,3 +60,25 @@ def computeSNR(inputFile, window, M, N, H):
             SNR1 and SNR2 are floats.
     """
     ## your code here
+    fs, x = UF.wavread(inputFile)
+    w = get_window(window, M, False)
+    
+    
+    y = stft.stft(x, w, N, H)
+    
+    noise = abs(x - y)
+    
+    E_noise = np.sum(noise ** 2)
+    E_signal = np.sum(x ** 2)
+    
+    snr1 = 10 * np.log10(E_signal / E_noise)
+    
+    x_smooth = x[M:-M]
+    y_smooth = y[M:-M]
+    E_noise_s = np.sum((x_smooth - y_smooth) ** 2)
+    E_signal_s = np.sum(x_smooth ** 2)
+    
+   
+    snr2 = 10 * np.log10(E_signal_s / E_noise_s)
+    
+    return snr1, snr2

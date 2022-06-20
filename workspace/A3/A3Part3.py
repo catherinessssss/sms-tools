@@ -63,7 +63,7 @@ def testRealEven(x):
     px = np.angle(X)
     isRealEven = True
 
-    if not np.any(px) < 1e-6:
+    if not np.any(px) < 1e-16:
         isRealEven = False
         
     return isRealEven, dftbuffer, X

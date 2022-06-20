@@ -82,4 +82,34 @@ def computeEngEnv(inputFile, window, M, N, H):
     """
     
     ### your code here
+    fs, x = UF.wavread(inputFile)
+    w = get_window(window, M, False)
     
+    xmX, xpX = stft.stftAnal(x, w, N, H)
+    # convert in Hz
+    xm = abs(10 ** (xmX / 20))
+    
+    frame_number = xm.shape[0]
+    bin_freqs = np.arange(N) * fs / float(N)
+    
+    bins_low = np.intersect1d(np.where(bin_freqs > 0)[0], np.where(bin_freqs < 3000)[0])
+    bins_high = np.intersect1d(np.where(bin_freqs > 3000)[0], np.where(bin_freqs < 10000)[0])
+    
+    en_low = np.zeros(frame_number)
+    en_high = np.zeros(frame_number)
+    
+    for i in np.arange(frame_number):
+        low = xm[i, bins_low]
+        high = xm[i, bins_high]
+        en_low[i] = np.sum(low ** 2)
+        en_high[i] = np.sum(high ** 2)
+        
+        
+    en_low[en_low < eps] = eps
+    en_high[en_high < eps] = eps
+        
+    eng_env = np.zeros((frame_number, 2))
+    eng_env[:, 0] = 10 * np.log10(en_low)
+    eng_env[:, 1] = 10 * np.log10(en_high)
+    
+    return eng_env
